@@ -1,0 +1,8 @@
+#ifndef AMIGOPHER_AMIGOPHER_H
+#define AMIGOPHER_AMIGOPHER_H
+
+#define AMIGOPHER_NAME "AmiGopher"
+#define AMIGOPHER_VERSION "0.0.1-m0"
+#define AMIGOPHER_DEFAULT_PORT 70
+
+#endif
