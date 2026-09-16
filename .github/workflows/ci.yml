@@ -5,10 +5,22 @@ on:
   pull_request:
 
 jobs:
-  m1-host:
+  host:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - name: M1 qualification
-        run: make clean qualify-m1
+      - name: Host qualification
+        run: make clean qualify-m2-host
+
+  amiga-cross-build:
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/bebbo/amiga-gcc:latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Show compiler
+        run: m68k-amigaos-gcc --version
+      - name: Build 68000 Amiga binary
+        run: make clean amiga AMIGA_CC=m68k-amigaos-gcc
