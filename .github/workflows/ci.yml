@@ -15,12 +15,32 @@ jobs:
 
   amiga-cross-build:
     runs-on: ubuntu-latest
-    container:
-      image: sebastianbergmann/amiga-gcc:latest
+    env:
+      TOOLCHAIN_SHA256: 381e227c9ef552f073771d6f851cfdf873b574f3cf5db7c1c0107ea5d7146edc
     steps:
+      - name: Cache Amiga GCC
+        uses: actions/cache@v4
+        id: cache-amiga-gcc
+        with:
+          path: ~/opt/amiga
+          key: ${{ runner.os }}-amiga-gcc-6.5.0
+
+      - name: Install Amiga GCC
+        if: steps.cache-amiga-gcc.outputs.cache-hit != 'true'
+        run: |
+          cd "$HOME"
+          curl --fail --silent --show-error --location \
+            --connect-timeout 15 --max-time 120 --retry 3 --retry-connrefused \
+            https://franke.ms/download/amiga-gcc.tgz -o amiga-gcc.tgz
+          echo "${TOOLCHAIN_SHA256}  amiga-gcc.tgz" | sha256sum -c -
+          tar -xf amiga-gcc.tgz
+          rm amiga-gcc.tgz
+
       - name: Checkout
         uses: actions/checkout@v4
+
       - name: Show compiler
-        run: m68k-amigaos-gcc --version
+        run: "$HOME/opt/amiga/bin/m68k-amigaos-gcc" --version
+
       - name: Build 68000 Amiga binary
-        run: make clean amiga AMIGA_CC=m68k-amigaos-gcc
+        run: make clean amiga AMIGA_CC="$HOME/opt/amiga/bin/m68k-amigaos-gcc"
