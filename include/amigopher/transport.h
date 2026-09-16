@@ -12,6 +12,7 @@
 struct ag_transport {
     int socket_fd;
     int last_error;
+    unsigned long timeout_ms;
 };
 
 void ag_transport_init(struct ag_transport *transport);
