@@ -11,14 +11,17 @@
 - Host-side static/foundation checks
 - ARexx designed as a first-class application interface
 
-## M1 — Gopher core
+## M1 — Gopher core — PASS
 
-- `gopher://` URL parser
-- RFC 1436 request construction
-- Menu-line parser
-- Item model
-- Host unit tests for parser/protocol code
-- No live network dependency in core tests
+Qualified on GitHub Actions run 35156667903 (2026-09-16), commit `951d4ad610f3c5d20841553733e4e1dff9712497`.
+
+- [x] `gopher://` URL parser
+- [x] RFC 1436 request construction
+- [x] Menu-line parser
+- [x] Item model
+- [x] Host unit tests for parser/protocol code
+- [x] No live network dependency in core tests
+- [x] GitHub Actions host qualification
 
 ## M2 — Amiga TCP transport
 
