@@ -1,38 +1,37 @@
-name: CI
+name: AmiGopher CI
 
-on:
-  push:
-  pull_request:
+on: [push, pull_request]
+
+permissions:
+  contents: read
 
 jobs:
   host:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+
       - name: Host qualification
         run: make clean qualify-m2-host
 
   amiga-cross-build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
       - name: Install Amiga GCC
-        shell: bash
         run: |
-          set -euo pipefail
+          set -eu
           curl -fL --retry 3 --connect-timeout 15 --max-time 120 \
             https://franke.ms/download/amiga-gcc.tgz \
-            -o "$RUNNER_TEMP/amiga-gcc.tgz"
-          echo '381e227c9ef552f073771d6f851cfdf873b574f3cf5db7c1c0107ea5d7146edc  '"$RUNNER_TEMP/amiga-gcc.tgz" | sha256sum -c -
-          tar -xzf "$RUNNER_TEMP/amiga-gcc.tgz" -C "$HOME"
+            -o /tmp/amiga-gcc.tgz
+          echo "381e227c9ef552f073771d6f851cfdf873b574f3cf5db7c1c0107ea5d7146edc  /tmp/amiga-gcc.tgz" | sha256sum -c -
+          tar -xzf /tmp/amiga-gcc.tgz -C "$HOME"
 
       - name: Show compiler
-        shell: bash
         run: "$HOME/opt/amiga/bin/m68k-amigaos-gcc" --version
 
       - name: Build 68000 Amiga binary
-        shell: bash
         run: make clean amiga AMIGA_CC="$HOME/opt/amiga/bin/m68k-amigaos-gcc"
