@@ -16,7 +16,7 @@ jobs:
   amiga-cross-build:
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/bebbo/amiga-gcc:latest
+      image: sebastianbergmann/amiga-gcc:latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
